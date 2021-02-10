@@ -181,8 +181,6 @@ class Snekbox(Cog):
         if truncated:
             paste_link = await self.upload_output(original_output)
 
-        output = output or "[No output]"
-
         return output, paste_link
 
     async def send_eval(self, ctx: Context, code: str) -> Message:
@@ -201,7 +199,12 @@ class Snekbox(Cog):
                 output, paste_link = await self.format_output(results["stdout"])
 
             icon = self.get_status_emoji(results)
-            msg = f"{ctx.author.mention} {icon} {msg}.\n\n```\n{output}\n```"
+
+            if output:
+                msg = f"{ctx.author.mention} {icon} {msg}.\n\n```\n{output}\n```"
+            else:
+                msg = f"{ctx.author.mention} {icon} {msg} with no output."
+                
             if paste_link:
                 msg = f"{msg}\nFull output: {paste_link}"
 
